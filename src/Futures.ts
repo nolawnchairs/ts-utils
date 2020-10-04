@@ -76,8 +76,8 @@ export namespace Futures {
           clearInterval(i)
           resolve()
         } else {
-          const now = new Date().getTime()
-          if (start + timeout >= now) {
+          const countdown = (start + timeout) - new Date().getTime()
+          if (countdown < 0) {
             clearInterval(i)
             reject(new Error(`Timeout of ${timeout}ms exhausted while awaiting condition to resolve`))
           }

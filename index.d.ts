@@ -31,7 +31,7 @@ export declare namespace Enum {
 	 *
 	 * @export
 	 * @param {object} anEnum
-	 * @param {Type} keysAs
+	 * @param {Type} [keysAs=Type.Number]
 	 * @return {*}  {object}
 	 */
 	function toObject(anEnum: object, keysAs?: Type): object;
@@ -236,9 +236,9 @@ export declare namespace Functions {
 	 * appeasing the TS compiler when a value is exptected to be a Promise
 	 *
 	 * @export
-	 * @return {*}  {Promise<void>}
+	 * @return {Promise<never>}
 	 */
-	function noopAsyncReject(): Promise<void>;
+	function noopAsyncReject(): Promise<never>;
 }
 /**
  * Futures is a namespace containing async functions
@@ -299,18 +299,19 @@ export declare namespace Futures {
 export declare class Latchable<T> {
 	protected _value: T;
 	protected _locked: boolean;
+	private _isImmutable;
 	constructor(value?: T);
 	/**
-	 * Creates an immutable instance where the value cannot
-	 * be changed
+	 * Creates an immutable instance that will freeze the
+	 * value once provided
 	 *
 	 * @static
 	 * @template T the type of the object to latch onto
-	 * @param {T} value the value to latch
+	 * @param {T} [value] the value to latch
 	 * @return {*}  {Latchable<T>} the new instance
 	 * @memberof Latchable
 	 */
-	static immutable<T>(value: T): Latchable<T>;
+	static immutable<T>(value?: T): Latchable<T>;
 	/**
 	 * Sets the value of the object and locks it
 	 *
