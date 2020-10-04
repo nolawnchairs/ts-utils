@@ -11,24 +11,31 @@ import { Futures } from './Futures'
 export class Latchable<T> {
   protected _value: T = null
   protected _locked = false
+  private _isImmutable = false
   constructor(value?: T) {
     this._value = value
+    if (value) {
+      this._locked = true
+    }
   }
 
   /**
-   * Creates an immutable instance where the value cannot
-   * be changed
+   * Creates an immutable instance that will freeze the
+   * value once provided
    *
    * @static
    * @template T the type of the object to latch onto
-   * @param {T} value the value to latch
+   * @param {T} [value] the value to latch
    * @return {*}  {Latchable<T>} the new instance
    * @memberof Latchable
    */
-  static immutable<T>(value: T): Latchable<T> {
-    Object.freeze(value)
+  static immutable<T>(value?: T): Latchable<T> {
     const instance = new Latchable<T>(value)
-    instance._locked = true
+    instance._isImmutable = true
+    if (value) {
+      Object.freeze(instance._value)
+      instance._locked = true
+    }
     return instance
   }
 
@@ -43,6 +50,8 @@ export class Latchable<T> {
       throw new Error('Latchable value is already locked')
     this._value = value
     this._locked = true
+    if (this._isImmutable)
+      Object.freeze(this._value)
   }
 
   /**

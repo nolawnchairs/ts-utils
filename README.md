@@ -455,13 +455,13 @@ Produces an object that will latch onto a value of type `T`, and will lock the v
 ```typescript
 constructor(value?: T)
 ```
-The constructor takes an optional value of its type `T`
+The constructor takes an optional value of its type `T`. If a value is provided, the value will be locked (latched) immediately, otherwise the value will bo locked when latched.
 
 ### `static Latchable.immutable`
 ```typescript
-Latchable.immutable<T>(value: T)
+Latchable.immutable<T>(value?: T)
 ```
-Creates a Latchable where the object is immediately frozen, and locked
+Creates a Latchable where the value will be frozen when supplied. If the value is supplied here via `Latchable.immutable`, it will lock and freeze immediately, otherwise it will lock and freeze the value when latched.
 
 ### `Latchable.latch`
 ```typescript
