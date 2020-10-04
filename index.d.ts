@@ -214,6 +214,77 @@ export declare namespace Futures {
 	 */
 	function waitUntilResolved(timeout: number, condition: Supplier<boolean | Promise<boolean>>, waitInterval?: number): Promise<unknown>;
 }
+/**
+ * A holder for a value that can be locked
+ *
+ * @export
+ * @class Latchable
+ * @template T the type of object to latch onto
+ */
+export declare class Latchable<T> {
+	protected _value: T;
+	protected _locked: boolean;
+	constructor(value?: T);
+	/**
+	 * Creates an immutable instance where the value cannot
+	 * be changed
+	 *
+	 * @static
+	 * @template T the type of the object to latch onto
+	 * @param {T} value the value to latch
+	 * @return {*}  {Latchable<T>} the new instance
+	 * @memberof Latchable
+	 */
+	static immutable<T>(value: T): Latchable<T>;
+	/**
+	 * Sets the value of the object and locks it
+	 *
+	 * @param {T} value the value to latch onto
+	 * @memberof Latchable
+	 */
+	latch(value: T): void;
+	/**
+	 * The current value of the latched object
+	 *
+	 * @readonly
+	 * @type {T}
+	 * @memberof Latchable
+	 */
+	get value(): T;
+}
+export declare class Lockable<T> extends Latchable<T> {
+	constructor(value?: T);
+	/**
+	 * Sets the value. Throws an error if attempting to set
+	 * while locked
+	 *
+	 * @param {T} value the value to set
+	 * @memberof Lockable
+	 */
+	set(value: T): void;
+	/**
+	 * Offer to set the value. Will wait until the value is unlocked,
+	 * then will set the value. If a timeout is provided, the offer will
+	 * reject if the value is not unlocked by the given timeout
+	 *
+	 * @param {T} value the value to set
+	 * @param {number} [timeout] the amount of time in milliseconds to wait
+	 * @memberof Lockable
+	 */
+	offer(value: T, timeout?: number): Promise<void>;
+	/**
+	 * Locks the value
+	 *
+	 * @memberof Lockable
+	 */
+	lock(): void;
+	/**
+	 * Unlocks the value
+	 *
+	 * @memberof Lockable
+	 */
+	unlock(): void;
+}
 export declare type KeySet<T> = (keyof T)[];
 export declare type WithLength = {
 	length: number;
