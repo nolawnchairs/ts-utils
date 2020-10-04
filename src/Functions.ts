@@ -215,9 +215,9 @@ export namespace Functions {
    * appeasing the TS compiler when a value is exptected to be a Promise
    *
    * @export
-   * @return {*}  {Promise<void>}
+   * @return {Promise<never>}
    */
-  export function noopAsyncReject(): Promise<void> {
+  export function noopAsyncReject(): Promise<never> {
     return Promise.reject()
   }
 }
