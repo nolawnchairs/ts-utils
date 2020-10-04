@@ -10,28 +10,55 @@ export declare namespace Enum {
 	 *
 	 * @export
 	 * @template T type of key (string or number)
-	 * @param {*} object the enum object
-	 * @param {Type} type the type of enum value (string or number)
+	 * @param {object} anEnum the enum object
 	 * @returns {T[]} array of values
 	 */
-	function values<T = string | number | symbol>(object: any, type: Type): T[];
+	function values<T = string | number>(anEnum: object): T[];
 	/**
 	 * Gets an array of the enum keys
 	 *
 	 * @export
-	 * @param {*} object the enum object
-	 * @param {Type} type the type of enum value (string or number)
+	 * @param {object} anEnum the enum object
 	 * @returns {string[]} array of keys
 	 */
-	function keys(object: any, type: Type): string[];
+	function keys(anEnum: object): string[];
+	/**
+	 * Creates an object of key/value pairs from the enum. If the enum
+	 * values are strings, then the original enum is returned (as it already is
+	 * a key/value pair). If the enum values are numbers, the type value dictates
+	 * whether the object is keyed with the enum's numeric value with the labels,
+	 * or keyed with the labels with the numeric values
+	 *
+	 * @export
+	 * @param {object} anEnum
+	 * @param {Type} keysAs
+	 * @return {*}  {object}
+	 */
+	function toObject(anEnum: object, keysAs?: Type): object;
 	/**
 	 * Gets the length of the enum's keys
 	 *
 	 * @export
-	 * @param {*} object the enum object
+	 * @param {object} anEnum the enum object
 	 * @returns {number} count of elements
 	 */
-	function length(object: any): number;
+	function length(anEnum: object): number;
+	/**
+	 * Determine if an enum values are numeric
+	 *
+	 * @export
+	 * @param {object} anEnum
+	 * @return boolean
+	 */
+	function isNumeric(anEnum: object): boolean;
+	/**
+	 * Determine if an enum values are numeric and sequential
+	 *
+	 * @export
+	 * @param {object} anEnum
+	 * @return boolean
+	 */
+	function isSequential(anEnum: object): boolean;
 }
 /**
  * Represents a function that takes no arguments and returns no data
@@ -43,6 +70,13 @@ export declare type VoidFunction = () => void;
  * @template U the return type
  */
 export declare type Function<T, U> = (value: T) => U;
+/**
+ * Represents a function that accepts one argument and produces a result
+ * that may be null or undefined.
+ * @template T the parameter type
+ * @template U the return type
+ */
+export declare type NullableFunction<T, U> = (value: T) => Nullable<U>;
 /**
  * Represents a function that accepts one optional argument and produces a result.
  * @template T the parameter type
@@ -57,6 +91,14 @@ export declare type OptionalFunction<T, U> = (value?: T) => U;
  */
 export declare type BiFunction<T, U, R> = (value1: T, value2: U) => R;
 /**
+ * Represents a function that accepts two arguments and produces a result
+ * that may be null or undefined.
+ * @template T the first argument type
+ * @template U the second argument type
+ * @template R the return type
+ */
+export declare type NullableBiFunction<T, U, R> = (value1: T, value2: U) => Nullable<R>;
+/**
  * Represents a function that accepts two optional arguments and produces a result.
  * @template T the first argument type
  * @template U the second argument type
@@ -64,15 +106,26 @@ export declare type BiFunction<T, U, R> = (value1: T, value2: U) => R;
  */
 export declare type OptionalBiFunction<T, U, R> = (value1?: T, value2?: U) => R;
 /**
- * Represents a supplier of results.
+ * Represents a supplier of a result.
  * @template T the return type
  */
 export declare type Supplier<T> = () => T;
+/**
+ * Represents a supplier of a result that may be null or undefined.
+ * @template T the return type
+ */
+export declare type NullableSupplier<T> = () => Nullable<T>;
 /**
  * Represents a supplier of a promise.
  * @template T the return type
  */
 export declare type AsyncSupplier<T> = () => Promise<T>;
+/**
+ * Represents a supplier of a promise whose resolved value may be
+ * null or undefinded.
+ * @template T the return type
+ */
+export declare type NullableAsyncSupplier<T> = () => Promise<Nullable<T>>;
 /**
  * Represents a supplier of two results as a tuple.
  * @template T the first return type
@@ -131,7 +184,13 @@ export declare type BiPredicate<T, U> = (value1: T, value2: U) => boolean;
  * and produces a number (integer) for comparison purposes
  * @template T the argument type
  */
-export declare type Comparator<T> = BiPredicate<T, boolean>;
+export declare type Comparator<T> = BiFunction<T, T, number>;
+/**
+ * Represents an operation that compares two operands of the same type
+ * and produces a boolean result for comparison purposes
+ * @template T the argument type
+ */
+export declare type EqualityOperator<T> = BiFunction<T, T, boolean>;
 export declare namespace Functions {
 	/**
 	 * Coerces any value into a boolean value. If the value is a string,
@@ -142,6 +201,22 @@ export declare namespace Functions {
 	 * @return {*}  {boolean}
 	 */
 	function coerceBoolean(value: any): boolean;
+	/**
+	 * Checks if a value is truthy
+	 *
+	 * @export
+	 * @param {*} value the value to test
+	 * @return {*}  {boolean}
+	 */
+	function isTruthy(value: any): boolean;
+	/**
+	 * Checks if a value is falsey
+	 *
+	 * @export
+	 * @param {*} value the value to test
+	 * @return {*}  {boolean}
+	 */
+	function isFalsey(value: any): boolean;
 	/**
 	 * A function that takes no arguments and returns no result
 	 *
@@ -289,5 +364,6 @@ export declare type KeySet<T> = (keyof T)[];
 export declare type WithLength = {
 	length: number;
 };
+export declare type Nullable<T> = T | null | undefined;
 
 export {};
