@@ -40,7 +40,7 @@ export namespace Enum {
    *
    * @export
    * @param {object} anEnum
-   * @param {Type} keysAs
+   * @param {Type} [keysAs=Type.Number]
    * @return {*}  {object}
    */
   export function toObject(anEnum: object, keysAs: Type = Type.Number): object {
