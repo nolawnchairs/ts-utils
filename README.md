@@ -289,9 +289,9 @@ Enum.values(StatusCode)
 
 ### `Enum.toObject`
 ```typescript
-<T>(anEnum: object, type?: Enum.Type) => T[]
+<T>(anEnum: object, keysAs?: Enum.Type) => T[]
 ```
-Returns an object representing the enum. For enums with string values, the enum is returned as-is, as it is already an object. Since enums with numeric values are keyed both by `label -> int` and `int -> label`, the expected key type (either number or string) can be provided. This defaults to `Enum.Type.Number`.
+Returns an object representing the enum. For enums with string values, the enum is returned as-is, as it is already an object. Since enums with numeric values are keyed both by `label -> int` and `int -> label`, the expected key type `keysAs` argument can be provided. This defaults to `Enum.Type.Number`.
 
 ```typescript
 // String values
