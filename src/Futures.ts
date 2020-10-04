@@ -79,7 +79,7 @@ export namespace Futures {
           const now = new Date().getTime()
           if (start + timeout >= now) {
             clearInterval(i)
-            reject()
+            reject(new Error(`Timeout of ${timeout}ms exhausted while awaiting condition to resolve`))
           }
         }
       }, waitInterval)
