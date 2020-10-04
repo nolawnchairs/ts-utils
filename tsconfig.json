@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
+    "lib": [
+      "es2015",
+      "esnext"
+    ],
+    "outDir": "./build",
+    "emitDecoratorMetadata": false,
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": false,
+    "noUnusedLocals": false,
+    "strictPropertyInitialization": false
+  },
+  "include": [
+    "./src/**/*"
+  ]
+}

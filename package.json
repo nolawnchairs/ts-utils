@@ -1,0 +1,23 @@
+{
+  "name": "@nolawnchairs/utils",
+  "version": "1.0.0",
+  "description": "Utilities for Typescript projects",
+  "main": "index.js",
+  "keywords": [],
+  "author": "Michael Wieczorek",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nolawnchairs/ts-utils"
+  },
+  "bugs": {
+    "url": "https://github.com/nolawnchairs/ts-utils/issues"
+  },
+  "devDependencies": {
+    "@types/node": "^14.11.2"
+  },
+  "scripts": {
+    "define": "dts-bundle-generator -o index.d.ts ./src/index.ts",
+    "compile": "tsc && npm rum define"
+  }
+}
