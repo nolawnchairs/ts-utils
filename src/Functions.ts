@@ -1,3 +1,4 @@
+import { Nullable } from '.'
 
 /**
  * Represents a function that takes no arguments and returns no data
@@ -10,6 +11,14 @@ export type VoidFunction = () => void
  * @template U the return type
  */
 export type Function<T, U> = (value: T) => U
+
+/**
+ * Represents a function that accepts one argument and produces a result
+ * that may be null or undefined.
+ * @template T the parameter type
+ * @template U the return type
+ */
+export type NullableFunction<T, U> = (value: T) => Nullable<U>
 
 /**
  * Represents a function that accepts one optional argument and produces a result.
@@ -27,6 +36,15 @@ export type OptionalFunction<T, U> = (value?: T) => U
 export type BiFunction<T, U, R> = (value1: T, value2: U) => R
 
 /**
+ * Represents a function that accepts two arguments and produces a result
+ * that may be null or undefined.
+ * @template T the first argument type
+ * @template U the second argument type
+ * @template R the return type
+ */
+export type NullableBiFunction<T, U, R> = (value1: T, value2: U) => Nullable<R>
+
+/**
  * Represents a function that accepts two optional arguments and produces a result.
  * @template T the first argument type
  * @template U the second argument type
@@ -35,16 +53,29 @@ export type BiFunction<T, U, R> = (value1: T, value2: U) => R
 export type OptionalBiFunction<T, U, R> = (value1?: T, value2?: U) => R
 
 /**
- * Represents a supplier of results.
+ * Represents a supplier of a result.
  * @template T the return type
  */
 export type Supplier<T> = () => T
+
+/**
+ * Represents a supplier of a result that may be null or undefined.
+ * @template T the return type
+ */
+export type NullableSupplier<T> = () => Nullable<T>
 
 /**
  * Represents a supplier of a promise.
  * @template T the return type
  */
 export type AsyncSupplier<T> = () => Promise<T>
+
+/**
+ * Represents a supplier of a promise whose resolved value may be
+ * null or undefinded.
+ * @template T the return type
+ */
+export type NullableAsyncSupplier<T> = () => Promise<Nullable<T>>
 
 /**
  * Represents a supplier of two results as a tuple.
@@ -113,7 +144,14 @@ export type BiPredicate<T, U> = (value1: T, value2: U) => boolean
  * and produces a number (integer) for comparison purposes
  * @template T the argument type
  */
-export type Comparator<T> = BiPredicate<T, boolean>
+export type Comparator<T> = BiFunction<T, T, number>
+
+/**
+ * Represents an operation that compares two operands of the same type
+ * and produces a boolean result for comparison purposes
+ * @template T the argument type
+ */
+export type EqualityOperator<T> = BiFunction<T, T, boolean>
 
 export namespace Functions {
 
@@ -129,6 +167,28 @@ export namespace Functions {
     if (typeof value == 'string')
       return value.toLowerCase() == 'true'
     return !!value
+  }
+
+  /**
+   * Checks if a value is truthy
+   *
+   * @export
+   * @param {*} value the value to test
+   * @return {*}  {boolean}
+   */
+  export function isTruthy(value: any): boolean {
+    return !!value
+  }
+
+  /**
+   * Checks if a value is falsey
+   *
+   * @export
+   * @param {*} value the value to test
+   * @return {*}  {boolean}
+   */
+  export function isFalsey(value: any): boolean {
+    return !value
   }
 
   /**

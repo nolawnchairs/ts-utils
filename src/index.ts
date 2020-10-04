@@ -5,3 +5,4 @@ export * from './Lockable'
 
 export type KeySet<T> = (keyof T)[]
 export type WithLength = { length: number }
+export type Nullable<T> = T | null | undefined
