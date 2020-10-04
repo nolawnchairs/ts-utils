@@ -221,7 +221,7 @@ As with `noop`, this function takes no arguments, but produces a `Promise` of ty
 
 ### `Functions.noopAsyncReject`
 ```typescript
-() => Promise<void>
+() => Promise<never>
 ```
 The same as `noopAsync`, but instead of resolving, it rejects.
 
