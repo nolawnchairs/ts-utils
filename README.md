@@ -455,7 +455,7 @@ Produces an object that will latch onto a value of type `T`, and will lock the v
 ```typescript
 constructor(value?: T)
 ```
-The constructor takes an optional value of its type `T`. If a value is provided, the value will be locked (latched) immediately, otherwise the value will bo locked when latched.
+The constructor takes an optional value of its type `T`. If a value is provided, the value will be locked (latched) immediately, otherwise the value will be locked when latched.
 
 ### `static Latchable.immutable`
 ```typescript
