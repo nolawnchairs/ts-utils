@@ -13,6 +13,13 @@ export type VoidFunction = () => void
 export type Function<T, U> = (value: T) => U
 
 /**
+ * Represents a function that accepts one argument and produces a result asynchronously.
+ * @template T the parameter type
+ * @template U the return type
+ */
+export type AsyncFunction<T, U> = (value: T) => Promise<U>
+
+/**
  * Represents a function that accepts one argument and produces a result
  * that may be null or undefined.
  * @template T the parameter type
