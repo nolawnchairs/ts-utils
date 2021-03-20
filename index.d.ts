@@ -367,6 +367,43 @@ export declare class Lockable<T> extends Latchable<T> {
 	 */
 	unlock(): void;
 }
+export declare namespace Objects {
+	/**
+	 * Filter out all object properties that are null or undefined
+	 *
+	 * @export
+	 * @param {Record<string, any>} input
+	 * @returns {Record<string, any>}
+	 */
+	function nonNull<T = Record<string, any>>(input: T): Partial<T>;
+	/**
+	 * Filter out all object properties that are undefined, keeping
+	 * null properties
+	 *
+	 * @export
+	 * @param {Record<string, any>} input
+	 * @returns {Record<string, any>}
+	 */
+	function nonUndefined<T = Record<string, any>>(input: T): Partial<T>;
+	/**
+	 * Filter out all object properties that are considered "false", which
+	 * includes null, undefined, zero, false and empty strings, objects or arrays
+	 * null properties
+	 *
+	 * @export
+	 * @param {Record<string, any>} input
+	 * @returns {Record<string, any>}
+	 */
+	function truthy<T = Record<string, any>>(input: T): Partial<T>;
+	/**
+	 * Filter out specified properties with a list of keys
+	 *
+	 * @export
+	 * @param input the input object
+	 * @param keys the keys to omit
+	 */
+	function drop<T, K extends keyof T>(input: T, ...keys: K[]): Partial<T>;
+}
 export declare type KeySet<T> = (keyof T)[];
 export declare type WithLength = {
 	length: number;
