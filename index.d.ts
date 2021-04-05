@@ -369,7 +369,8 @@ export declare class Lockable<T> extends Latchable<T> {
 }
 export declare namespace Objects {
 	/**
-	 * Filter out all object properties that are null or undefined
+	 * Remove all object properties that are null or undefined,
+	 * but retains falsey values such as empty strings or zero
 	 *
 	 * @export
 	 * @param {Record<string, any>} input
@@ -377,8 +378,8 @@ export declare namespace Objects {
 	 */
 	function nonNull<T = Record<string, any>>(input: T): Partial<T>;
 	/**
-	 * Filter out all object properties that are undefined, keeping
-	 * null properties
+	 * Remove all object properties that are undefined, but retains
+	 * null properties and falsey values such as empty strings or zero
 	 *
 	 * @export
 	 * @param {Record<string, any>} input
@@ -386,15 +387,24 @@ export declare namespace Objects {
 	 */
 	function nonUndefined<T = Record<string, any>>(input: T): Partial<T>;
 	/**
-	 * Filter out all object properties that are considered "false", which
-	 * includes null, undefined, zero, false and empty strings, objects or arrays
-	 * null properties
+	 * Remove all object properties that are considered "falsey", which
+	 * includes null, undefined, zero, false and empty strings, but retains
+	 * empty arrays and objects
 	 *
 	 * @export
 	 * @param {Record<string, any>} input
 	 * @returns {Record<string, any>}
 	 */
 	function truthy<T = Record<string, any>>(input: T): Partial<T>;
+	/**
+	 * Remove all object properties that are empty (zero-length) strings, but retain
+	 * all other values
+	 *
+	 * @export
+	 * @param {Record<string, any>} input
+	 * @returns {Record<string, any>}
+	 */
+	function nonEmptyStrings<T = Record<string, any>>(input: T): Partial<T>;
 	/**
 	 * Filter out specified properties with a list of keys
 	 *
