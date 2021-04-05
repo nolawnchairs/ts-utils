@@ -2,7 +2,8 @@
 export namespace Objects {
 
   /**
-   * Filter out all object properties that are null or undefined
+   * Remove all object properties that are null or undefined,
+   * but retains falsey values such as empty strings or zero
    *
    * @export
    * @param {Record<string, any>} input
@@ -11,15 +12,15 @@ export namespace Objects {
   export function nonNull<T = Record<string, any>>(input: T): Partial<T> {
     const output = {}
     for (const key of Object.keys(input)) {
-      if (input[key] !== null || input[key] !== undefined)
+      if (input[key] !== null && input[key] !== undefined)
         output[key] = input[key]
     }
     return output
   }
 
   /**
-   * Filter out all object properties that are undefined, keeping
-   * null properties
+   * Remove all object properties that are undefined, but retains
+   * null properties and falsey values such as empty strings or zero
    *
    * @export
    * @param {Record<string, any>} input
@@ -35,9 +36,9 @@ export namespace Objects {
   }
 
   /**
-   * Filter out all object properties that are considered "false", which
-   * includes null, undefined, zero, false and empty strings, objects or arrays
-   * null properties
+   * Remove all object properties that are considered "falsey", which
+   * includes null, undefined, zero, false and empty strings, but retains
+   * empty arrays and objects
    *
    * @export
    * @param {Record<string, any>} input
@@ -47,6 +48,23 @@ export namespace Objects {
     const output = {}
     for (const key of Object.keys(input)) {
       if (!!input[key])
+        output[key] = input[key]
+    }
+    return output
+  }
+
+  /**
+   * Remove all object properties that are empty (zero-length) strings, but retain
+   * all other values
+   *
+   * @export
+   * @param {Record<string, any>} input
+   * @returns {Record<string, any>}
+   */
+  export function nonEmptyStrings<T = Record<string, any>>(input: T): Partial<T> {
+    const output = {}
+    for (const key of Object.keys(input)) {
+      if (typeof input[key] == 'string' && input[key].length > 0)
         output[key] = input[key]
     }
     return output
