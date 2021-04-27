@@ -538,3 +538,33 @@ Locks the value
 ```
 
 Unlocks the value
+
+---
+
+## `class Backoff`
+Creates a backoff circuit where a user-defined function is called after an increasingly delayed time. All time values with the Backoff class are measured in **seconds**
+
+
+
+### `constructor`
+```typescript
+constructor(strategy: BackoffStrategy, maxWait: number, callable: AsyncSupplier<boolean>)
+```
+| Parameter | Type | Description |
+|---|---|---|
+|`strategy`|`BackoffStrategy`| The strategy to govern the time between calls |
+|`maxWait`| number | The maximum time (in seconds) to wait before the circuit times out. Use any value less than `0` to bypass timeout |
+|`callable`|`AsyncSupplier<boolean>`| The function to call on each circuit. It must return a `Promise` of type `boolean` where `true` indicates the operation has completed and the circuit can stop, and `false` indicates the circuit must continue and triggers another wait period |
+
+### `Backoff.start`
+```typescript
+(initialDelay: number = 0) => Promise<void>
+```
+Starts the backoff circuit with an optional delay on the first call (in seconds). Note that if the circuit times out, and error will be thrown, so ensure you handle the promise rejection.
+
+## `enum BackoffStrategy`
+| Value | Description |
+|---|---|
+| `LINEAR` | Subsequent calls are made in an incremental fashion, e.g. `1, 2, 3, 4, 5...` |
+| `FIBONACCI` | Subsequent calls are made using the Fibonacci sequence, e.g. `1, 2, 3, 5, 8, 13...` Note this is not true Fibonacci, as the sequence starts `1, 2` and not `1,1`|
+| `EXPONENTIAL` | Subsequent calls are made doubling the last, e.g. `1, 2, 4, 8, 16...`|
