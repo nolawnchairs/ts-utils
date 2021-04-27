@@ -3,6 +3,7 @@ export * from './Functions'
 export * from './Futures'
 export * from './Lockable'
 export * from './Objects'
+export * from './Backoff'
 
 export type KeySet<T> = (keyof T)[]
 export type WithLength = { length: number }

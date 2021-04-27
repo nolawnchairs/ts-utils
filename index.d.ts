@@ -414,6 +414,34 @@ export declare namespace Objects {
 	 */
 	function drop<T, K extends keyof T>(input: T, ...keys: K[]): Partial<T>;
 }
+export declare enum BackoffStrategy {
+	LINEAR = "LINEAR",
+	FIBONACCI = "FIBONACCI",
+	EXPONENTIAL = "EXPONENTIAL"
+}
+export declare class Backoff {
+	private readonly strategy;
+	private readonly maxWait;
+	private readonly callable;
+	private prevDelay;
+	private nextDelay;
+	/**
+	 * Creates an instance of a Backoff circuit. Define a function to be called repeatedly until it resolves
+	 * to true. Each time it resolves to false, the circuit will run again, the timing of which is governed by
+	 * the BackoffStrategy:
+	 * LINEAR: subsequent calls are made incrementally by one second (1, 2, 3, 4, 5...)
+	 * FIBONACCI: subsquent calls are made using the Fibonacci sequence (1, 1, 2, 3, 5, 8...)
+	 * EXPONENTIAL: subsequent calls are made doubling the time of the last (1, 2, 4, 8, 16...)
+	 *
+	 * @param {BackoffStrategy} strategy the method in which the duration until the next call is calculted
+	 * @param {number} maxWait the maximum amount of second to wait before timing out. A timeout will throw an error
+	 * @param {AsyncSupplier<boolean>} callable the asynchronous callback function, which will stop the circuit when it resolves to TRUE
+	 * @memberof Backoff
+	 */
+	constructor(strategy: BackoffStrategy, maxWait: number, callable: AsyncSupplier<boolean>);
+	start(): Promise<void>;
+	private next;
+}
 export declare type KeySet<T> = (keyof T)[];
 export declare type WithLength = {
 	length: number;
