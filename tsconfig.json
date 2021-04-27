@@ -17,7 +17,8 @@
     "allowSyntheticDefaultImports": true,
     "strict": false,
     "noUnusedLocals": false,
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "removeComments": true,
   },
   "include": [
     "./src/**/*"
