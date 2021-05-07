@@ -18,7 +18,7 @@
     "strict": false,
     "noUnusedLocals": false,
     "strictPropertyInitialization": false,
-    "removeComments": true,
+    "removeComments": false,
   },
   "include": [
     "./src/**/*"
