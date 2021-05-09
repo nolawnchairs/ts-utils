@@ -1,6 +1,5 @@
 
-import { VoidFunction } from '.'
-import { AsyncSupplier, BiFunction } from './Functions'
+import { AsyncSupplier, BiFunction, VoidFunction } from './Functions'
 import { Futures } from './Futures'
 
 export enum BackoffStrategy {
