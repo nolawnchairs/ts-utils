@@ -237,14 +237,6 @@ export declare namespace Functions {
 	 * @returns {Promise<void>}
 	 */
 	function noopAsync(): Promise<void>;
-	/**
-	 * A noop function where a Promise rejection is expected. Useful for
-	 * appeasing the TS compiler when a value is exptected to be a Promise
-	 *
-	 * @export
-	 * @return {Promise<never>}
-	 */
-	function noopAsyncReject(): Promise<never>;
 }
 /**
  * Futures is a namespace containing async functions
@@ -279,9 +271,9 @@ export declare namespace Futures {
 	 * @export
 	 * @param {(Supplier<boolean | Promise<boolean>>)} condition the condition to be met
 	 * @param {number} [waitInterval=1] the time in milliseconds between intervals
-	 * @returns
+	 * @returns {*}  {Promise<void>}
 	 */
-	function waitUntil(condition: Supplier<boolean | Promise<boolean>>, waitInterval?: number): Promise<unknown>;
+	function waitUntil(condition: Supplier<boolean | Promise<boolean>>, waitInterval?: number): Promise<void>;
 	/**
 	 * Waits until the provided condition is met, then resolves
 	 * unless the condition returns false or timeout is reached, then
@@ -291,9 +283,9 @@ export declare namespace Futures {
 	 * @param {number} timeout the amount in milliseconds to wait
 	 * @param {(Supplier<boolean | Promise<boolean>>)} condition the condition to be met
 	 * @param {number} [waitInterval=1] the time in milliseconds between intervals
-	 * @returns
+	 * @returns {*}  {Promise<void>}
 	 */
-	function waitUntilResolved(timeout: number, condition: Supplier<boolean | Promise<boolean>>, waitInterval?: number): Promise<unknown>;
+	function waitUntilResolved(timeout: number, condition: Supplier<boolean | Promise<boolean>>, waitInterval?: number): Promise<void>;
 }
 /**
  * A holder for a value that can be locked
@@ -334,39 +326,6 @@ export declare class Latchable<T> {
 	 */
 	get value(): T;
 }
-export declare class Lockable<T> extends Latchable<T> {
-	constructor(value?: T);
-	/**
-	 * Sets the value. Throws an error if attempting to set
-	 * while locked
-	 *
-	 * @param {T} value the value to set
-	 * @memberof Lockable
-	 */
-	set(value: T): void;
-	/**
-	 * Offer to set the value. Will wait until the value is unlocked,
-	 * then will set the value. If a timeout is provided, the offer will
-	 * reject if the value is not unlocked by the given timeout
-	 *
-	 * @param {T} value the value to set
-	 * @param {number} [timeout] the amount of time in milliseconds to wait
-	 * @memberof Lockable
-	 */
-	offer(value: T, timeout?: number): Promise<void>;
-	/**
-	 * Locks the value
-	 *
-	 * @memberof Lockable
-	 */
-	lock(): void;
-	/**
-	 * Unlocks the value
-	 *
-	 * @memberof Lockable
-	 */
-	unlock(): void;
-}
 export declare namespace Objects {
 	/**
 	 * Remove all object properties that are null or undefined,
@@ -406,13 +365,13 @@ export declare namespace Objects {
 	 */
 	function nonEmptyStrings<T = Record<string, any>>(input: T): Partial<T>;
 	/**
-	 * Filter out specified properties with a list of keys
+	 * Removed specified properties by provided keys
 	 *
 	 * @export
 	 * @param input the input object
 	 * @param keys the keys to omit
 	 */
-	function drop<T, K extends keyof T>(input: T, ...keys: K[]): Partial<T>;
+	function drop<T extends Record<string, any>, K extends keyof T>(input: T, ...keys: K[]): Partial<T>;
 }
 export declare enum BackoffStrategy {
 	/**
@@ -480,6 +439,15 @@ export declare class Backoff {
 	 */
 	start(): Promise<void>;
 }
+export declare type BindDecorator<T> = (_: object, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>;
+/**
+ * Binds a class method to its instance using "this"
+ *
+ * @export
+ * @template T
+ * @returns {BindDecorator<T>}
+ */
+export declare function Bind<T extends () => any>(): BindDecorator<T>;
 export declare type KeySet<T> = (keyof T)[];
 export declare type WithLength = {
 	length: number;
