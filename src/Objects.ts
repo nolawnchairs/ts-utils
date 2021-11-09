@@ -71,13 +71,13 @@ export namespace Objects {
   }
 
   /**
-   * Filter out specified properties with a list of keys
+   * Removed specified properties by provided keys
    *
    * @export
    * @param input the input object
    * @param keys the keys to omit
    */
-  export function drop<T, K extends keyof T>(input: T, ...keys: K[]): Partial<T> {
+  export function drop<T extends Record<string, any>, K extends keyof T>(input: T, ...keys: K[]): Partial<T> {
     const output: Partial<T> = {}
     for (const key of Object.keys(input) as K[])
       if (!keys.includes(key))
