@@ -1,11 +1,29 @@
 # TS Utilities
 
-This is a repo with utility functions and definitions for my TypeScript projects. No guarantees.
+This is a repo with utility functions and definitions for TypeScript projects. This is more or less an in-house library, but free to use for anybody.
+
+## Table of Contents
+- [Table of Contents](#table-of-contents)
+- [Base Types](#base-types)
+- [Function Typings](#function-typings)
+- [Functions Namespace](#functions-namespace)
+- [Enum Namespace](#enum-namespace)
+- [Objects Namespace](#objects-namespace)
+- [Futures Namespace](#futures-namespace)
+- [Latchable Class](#latchable-class)
+- [Lockable Class](#lockable-class)
+- [Backoff Class](#backoff-class)
+- [Decorators](#decorators)
+  - [@Bind](#bind)
+___
 
 ## Base Types
+[Back to Top](#table-of-contents)
 
 ### `KeySet<T>`
+
 Represents a set of keys from an object of type `T`, Useful for giving intellisense a helping hand.
+
 
 ```typescript
 interface Foo {
@@ -33,8 +51,11 @@ Represents a value that can possibly be `null` or `undefined`. Useful for annota
 function thing(value: Nullable<string>) { ... }
 ```
 
-## Function Types
-Function typings are a succinct way of defining functions, and make documenting more clear. Most these names are analagous to the funtional interfaces of Java 8.
+## Function Typings
+[Back to Top](#table-of-contents)
+
+Function typings are a succinct way of defining functions, and make documenting more clear. Most these names are analagous to the functional interfaces of Java 8, with additional typings that are specific to JS/TS development.
+
 
 ```typescript
 // Normally, you'd define a function argument like this
@@ -177,8 +198,11 @@ Represents an operation that compares two operands of the same type `T` and prod
 ```
 ---
 
-## `Functions` namespace
-The function namespace contains a few utility functions
+## Functions namespace
+[Back to Top](#table-of-contents)
+
+The function namespace contains a few miscellaneous utility functions that shorten some verbose native JS/TS implentations
+
 
 ### `Functions.coerceBoolean`
 ```typescript
@@ -219,16 +243,14 @@ A function that takes no arguments, and produces no result. Useful for times whe
 ```
 As with `noop`, this function takes no arguments, but produces a `Promise` of type `void` that immediately resolves. Not especially useful, except to appease the Typescript compiler in certain cases where you don't care about an asynchronous result, but still must pass an asynchronous function consumer.
 
-### `Functions.noopAsyncReject`
-```typescript
-() => Promise<never>
-```
-The same as `noopAsync`, but instead of resolving, it rejects.
 
 ---
 
-## `Enum` namespace
-Enums in Typescript are fun to use, but come with some restrictions out of the box. The `Enum` namespace exposes functions to read keys and values from your enum objects, and gather additional information about them.
+## Enum namespace
+[Back to Top](#table-of-contents)
+
+Enums in Typescript are very useful, but come with some restrictions out of the box when it comes to introspection. The `Enum` namespace exposes functions to read keys and values from your enum objects, and gather additional information about them that are otherwise verbose to write yourself.
+
 
 ### `Enum.keys`
 ```typescript
@@ -385,8 +407,67 @@ Enum.isSequential(Flags)  // false
 
 ---
 
-## `Futures` namespace
-The `Futures` namespace contains functions that wrap the nastiness of `setTimeout` and allow cleaner code geared towards usage alongside `async/await`. 
+## Objects namespace
+[Back to Top](#table-of-contents)
+
+The Objects namespace offers some useful utility functions for filtering out undesirable properties from your POJOs.
+
+### `Objects.nonNull`
+
+```typescript
+<T = Record<string, any>>(input: T) => Partial<T>
+```
+
+Removes all object properties that are `null` or `undefined`, but retains falsey values such as empty strings or zero.
+
+### `Objects.nonUndefined`
+```typescript
+<T = Record<string, any>>(input: T) => Partial<T>
+```
+Remove all object properties that are undefined, but retains null properties and falsey values such as empty strings or zero
+
+### `Objects.truthy`
+```typescript
+<T = Record<string, any>>(input: T) => Partial<T>
+```
+Remove all object properties that are considered "falsey", which includes null, undefined, zero, false and empty strings, but retains empty arrays and objects.
+
+### `Objects.nonEmptyStrings`
+```typescript
+<T = Record<string, any>>(input: T) => Partial<T>
+```
+Remove all object properties that are empty (zero-length) strings.
+
+### `Objects.drop`
+```typescript
+<T extends Record<string, any>, K extends keyof T>>(input: T, ...keys: K[]) => Partial<T>
+```
+Removed specified properties by provided keys.
+
+```typescript
+const a = {
+    first: 1,
+    second: 2,
+    third: 3,
+    fourth: 4,
+    fifth: 5,
+}
+const b = Objects.drop(a, 'first', 'third')
+console.log(b)
+// {
+//     second: 2,
+//     fourth: 4,
+//     fifth: 5,
+// }
+```
+
+---
+
+## Futures namespace
+
+The `Futures` namespace contains functions that wrap the nastiness of `setTimeout` and allow cleaner code geared towards usage alongside `async/await`.
+
+[Back to Top](#table-of-contents)
 
 ### `async Futures.wait`
 ```typescript
@@ -448,8 +529,13 @@ async function foo() {
 ```
 ---
 
-## `class Latchable<T>`
-Produces an object that will latch onto a value of type `T`, and will lock the value, preventing it from being modified. Useful for a value that needs to be defined, but populated later, and is meant as a more secure way than using `let`, since the Latchable instance itself should be declared with `const`.
+## Latchable Class 
+[Back to Top](#table-of-contents)
+
+`class Latchable<T>` 
+
+Produces an object that will latch onto a value of type `T`, and will lock the value, preventing it from being modified. Useful for a value that needs to be defined, but populated later, but never redefined in the future.
+
 
 ### `constructor`
 ```typescript
@@ -472,7 +558,7 @@ Latches the value of type `T` and locks the instance. If `latch` is called while
 ```typescript
 const holder = new Latchable<number>()
 try {
-    doSomethingThatMayThrow()
+    doSomethingThatMayThrowAnError()
     holder.latch(1)
 } catch {
     holder.latch(2)
@@ -490,58 +576,11 @@ console.log(holder.value) // 'foo'
 ```
 ---
 
-## `class Lockable<T> extends Latchable<T>`
-Similar to `Latchable<T>`, but can be locked and unlocked at will. Note that in 99% of instances, this class is not useful given the asynchronous nature of Javascript, but one instance this proved useful was when dealing with `localStorage` or `sessionStorage` in an Electron application that used multiple browser windows. These storage mechanisms where bound to the `window` object for each window, and synchronizing the values and preventing asynchrnous client-side Javascript from writing different values in different windows was mitigated using `Lockable`.
+## Backoff Class
+[Back to Top](#table-of-contents)
 
+`class Backoff`
 
-### `Lockable.value`
-see `Latchable.value`
-
-### `Lockable.latch`
-see `Latchable.latch`
-
-Since Lockable extends Latchable, it uses the `latch` method to latch the value and lock it. With `Lacthable`, the value can never be changed or unlocked once latched (hence the name 'latch'). `Lockable`, on the other hand can lock and unlock the value when needed, and the internal value can be changed by using either the `set` or `offer` method.
-
-### `Lockable.set`
-```typescript
-(value: T) => void
-```
-Sets the value synchronously without locking. Will throw an error if attempting to set the value while locked. Use `set` when unsure about which branch a piece of code will take.
-
-```typescript
-const holder = new Lockable<number>(0)
-try {
-    doSomethingThatMayThrow()
-    holder.set(1)
-} catch {
-    holder.set(2)
-} finally {
-    holder.lock()
-}
-```
-
-### `async Lockable.offer`
-```typescript
-async (value: T, timeout?: number) => void
-```
-Attempts to set the value while the value is possibly locked, and will wait until the value has been unlocked before setting the new value. An optional `timeout` can be provided to limit how long it should wait before throwing an error. Should be used inside a `try/catch` block. If no timeout is provided and the instance never unlocks, this will never resolve and the host function will not continue.
-
-### `Lockable.lock`
-```typescript
-() => void
-```
-Locks the value
-
-### `Lockable.unlock`
-```typescript
-() => void
-```
-
-Unlocks the value
-
----
-
-## `class Backoff`
 Creates a backoff circuit where a user-defined function is called after an increasingly delayed time. All time values with the Backoff class are measured in **seconds**
 
 
@@ -572,3 +611,31 @@ Starts the backoff circuit. Note that if the circuit times out, and error will b
 | `LINEAR` | Subsequent calls are made in an incremental fashion, e.g. `1, 2, 3, 4, 5...` |
 | `FIBONACCI` | Subsequent calls are made using the Fibonacci sequence, e.g. `1, 2, 3, 5, 8, 13...` Note this is not true Fibonacci, as the sequence starts `1, 2` and not `1,1`|
 | `EXPONENTIAL` | Subsequent calls are made doubling the last, e.g. `1, 2, 4, 8, 16...`|
+
+## Decorators
+[Back to Top](#table-of-contents)
+
+### @Bind
+
+Binds the decorated method's `this` context to the instance of the class to which it's attached
+
+```typescript
+class Sample {
+    public value = 'Value'
+    
+    @Bind()
+    getValue(): string {
+        return this.value
+    }
+}
+
+function someFunction(fn: Consumer<string>) {
+    console.log(fn())
+}
+
+const sample = new Sample()
+
+// Will print 'Value' because the getValue method is bound to the instance
+someFunction(sample.getValue)
+```
+
