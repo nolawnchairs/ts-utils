@@ -4,6 +4,7 @@ export * from './Futures'
 export * from './Lockable'
 export * from './Objects'
 export * from './Backoff'
+export * from './Decorators'
 
 export type KeySet<T> = (keyof T)[]
 export type WithLength = { length: number }
