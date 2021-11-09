@@ -216,15 +216,4 @@ export namespace Functions {
   export function noopAsync(): Promise<void> {
     return Promise.resolve()
   }
-
-  /**
-   * A noop function where a Promise rejection is expected. Useful for
-   * appeasing the TS compiler when a value is exptected to be a Promise
-   *
-   * @export
-   * @return {Promise<never>}
-   */
-  export function noopAsyncReject(): Promise<never> {
-    return Promise.reject()
-  }
 }
