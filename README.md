@@ -4,6 +4,7 @@ This is a repo with utility functions and definitions for TypeScript projects. T
 
 ## Table of Contents
 - [Table of Contents](#table-of-contents)
+- [Installation](#installation)
 - [Base Types](#base-types)
 - [Function Typings](#function-typings)
 - [Functions Namespace](#functions-namespace)
@@ -16,6 +17,16 @@ This is a repo with utility functions and definitions for TypeScript projects. T
 - [Decorators](#decorators)
   - [@Bind](#bind)
 ___
+
+## Installation
+
+Install with NPM or Yarn
+
+`npm i @nolawnchairs/utils`
+
+or 
+
+`yarn add @nolawnchairs/utils`
 
 ## Base Types
 [Back to Top](#table-of-contents)
