@@ -43,17 +43,17 @@ export namespace Futures {
    *
    * @export
    * @param {(Supplier<boolean | Promise<boolean>>)} condition the condition to be met
-   * @param {number} [waitInterval=1] the time in milliseconds between intervals
+   * @param {number} [pollInterval=1] the time in milliseconds between intervals
    * @returns {*}  {Promise<void>}
    */
-  export async function waitUntil(condition: Supplier<boolean | Promise<boolean>>, waitInterval: number = 1): Promise<void> {
+  export async function waitUntil(condition: Supplier<boolean | Promise<boolean>>, pollInterval: number = 1): Promise<void> {
     return new Promise(resolve => {
       const i = setInterval(async () => {
         if (await condition()) {
           clearInterval(i)
           resolve()
         }
-      }, waitInterval)
+      }, pollInterval)
     })
   }
 
@@ -65,10 +65,10 @@ export namespace Futures {
    * @export
    * @param {number} timeout the amount in milliseconds to wait
    * @param {(Supplier<boolean | Promise<boolean>>)} condition the condition to be met
-   * @param {number} [waitInterval=1] the time in milliseconds between intervals
+   * @param {number} [pollInterval=1] the time in milliseconds between intervals
    * @returns {*}  {Promise<void>}
    */
-  export async function waitUntilResolved(timeout: number, condition: Supplier<boolean | Promise<boolean>>, waitInterval: number = 1): Promise<void> {
+  export async function waitUntilResolved(timeout: number, condition: Supplier<boolean | Promise<boolean>>, pollInterval: number = 1): Promise<void> {
     const start = new Date().getTime()
     return new Promise((resolve, reject) => {
       const i = setInterval(async () => {
@@ -82,7 +82,7 @@ export namespace Futures {
             reject(new Error(`Timeout of ${timeout}ms exhausted while awaiting condition to resolve`))
           }
         }
-      }, waitInterval)
+      }, pollInterval)
     })
   }
 }
