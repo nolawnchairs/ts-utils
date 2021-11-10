@@ -22,11 +22,15 @@ ___
 
 Install with NPM or Yarn
 
-`npm i @nolawnchairs/utils`
+```
+npm i @nolawnchairs/utils
+```
 
 or 
 
-`yarn add @nolawnchairs/utils`
+```
+yarn add @nolawnchairs/utils
+```
 
 ## Base Types
 [Back to Top](#table-of-contents)
