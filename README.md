@@ -545,7 +545,7 @@ async function foo() {
 
 ### `async Futures.awaitWithTimeout`
 ```typescript
-async (timeout: number, runner: AsyncSupplier<boolean>) => Promise<void>
+async <T>(timeout: number, runner: AsyncSupplier<T>) => Promise<T>
 ```
 For usage in an `async` function, this calls an async supplier function and will attempt to return its resolved value within the allotted timeout. If the function does not resolve before the timeout expires, an error is thrown. Use inside of a `try/catch` block.
 
