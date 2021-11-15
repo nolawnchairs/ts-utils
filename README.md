@@ -529,7 +529,7 @@ async function foo() {
 ```typescript
 async (timeout: number, condition: AsyncSupplier<boolean>, waitInterval?: number) => Promise<void>
 ```
-This does the same thing as `Futures.waitUntil`, except that it takes a `timeout` in milliseconds as the first agument and will reject if the condition is not met before the timeout exhausts. Use inside of a `try/catch` block.
+This does the same thing as `Futures.waitUntil`, except that it takes a `timeout` in milliseconds as the first agument and will reject if the condition is not met before the timeout expires. Use inside of a `try/catch` block.
 
 ```typescript
 async function foo() {
@@ -542,6 +542,22 @@ async function foo() {
     }
 }
 ```
+
+### `async Futures.awaitWithTimeout`
+```typescript
+async (timeout: number, runner: AsyncSupplier<boolean>) => Promise<void>
+```
+For usage in an `async` function, this calls an async supplier function and will attempt to return its resolved value within the allotted timeout. If the function does not resolve before the timeout expires, an error is thrown. Use inside of a `try/catch` block.
+
+```typescript
+try {
+    const value = await Futures.awaitWithTimeout<any>(10000, () => somePromiseThatMayNeverResolve())
+    console.log('It resolved, we got the value!')
+} catch {
+    console.error('It never resolved, so timed out after 10000ms 💩')
+}
+```
+
 ---
 
 ## Latchable Class 

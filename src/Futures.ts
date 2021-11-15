@@ -1,4 +1,5 @@
 
+import { AsyncSupplier, Latchable } from '.'
 import { Supplier, VoidFunction } from './Functions'
 
 /**
@@ -79,10 +80,29 @@ export namespace Futures {
           const countdown = (start + timeout) - new Date().getTime()
           if (countdown < 0) {
             clearInterval(i)
-            reject(new Error(`Timeout of ${timeout}ms exhausted while awaiting condition to resolve`))
+            reject(new Error(`Timeout of ${timeout}ms expired while awaiting condition to resolve`))
           }
         }
       }, pollInterval)
     })
+  }
+
+  /**
+   * Executes a function with a timeout and supplies a result or throws an error
+   * if and when the timeout is reached
+   *
+   * @export
+   * @template T
+   * @param {number} timeout
+   * @param {AsyncSupplier<T>} runner
+   * @return {*}  {Promise<T>}
+   */
+  export async function awaitWithTimeout<T>(timeout: number, runner: AsyncSupplier<T>): Promise<T> {
+    return Promise.race([
+      runner(),
+      new Promise<T>((_, reject) => {
+        setTimeout(() => reject(new Error(`Timeout of ${timeout} expired while awaiting runner function to resolve`)), timeout)
+      })
+    ])
   }
 }
