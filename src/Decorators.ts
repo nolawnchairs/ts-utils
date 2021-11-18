@@ -1,5 +1,5 @@
 
-type BindDecorator<T> = (_: object, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+type BindDecorator = (_: object, propertyKey: string, descriptor: PropertyDescriptor) => PropertyDescriptor
 
 /**
  * Binds a class method to its instance using "this"
@@ -8,8 +8,8 @@ type BindDecorator<T> = (_: object, propertyKey: string, descriptor: TypedProper
  * @template T
  * @returns {BindDecorator<T>}
  */
-export function Bind<T extends () => any>(): BindDecorator<T> {
-  return (_: object, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T> => {
+export function Bind(): BindDecorator {
+  return (_: object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor => {
     // Shamelessly copied from https://github.com/NoHomey/bind-decorator/
     if (!descriptor || (typeof descriptor.value !== 'function')) {
       throw new TypeError(`Only methods can be decorated with @Bind. <${propertyKey}> is not a method!`)
@@ -17,8 +17,8 @@ export function Bind<T extends () => any>(): BindDecorator<T> {
 
     return {
       configurable: true,
-      get(this: T): T {
-        const bound: T = descriptor.value!.bind(this)
+      get(this: any): any {
+        const bound = descriptor.value!.bind(this)
         // Credits to https://github.com/andreypopp/autobind-decorator for memoizing the result of bind against a symbol on the instance.
         Object.defineProperty(this, propertyKey, {
           value: bound,

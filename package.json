@@ -39,6 +39,7 @@
   },
   "scripts": {
     "define": "dts-bundle-generator -o index.d.ts ./src/index.ts",
-    "compile": "tsc && npm rum define"
+    "compile": "tsc && npm rum define",
+    "test": "jest"
   }
 }
