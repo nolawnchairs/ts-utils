@@ -291,7 +291,8 @@ export declare namespace Futures {
 	function waitUntilResolved(timeout: number, condition: Supplier<boolean | Promise<boolean>>, pollInterval?: number): Promise<void>;
 	/**
 	 * Calls an async supplier function and will attempt to return its resolved value within the
-	 * allotted timeout. If the function does not resolve before the timeout expires, an error is thrown
+	 * allotted timeout. If the function does not resolve before the timeout expires, an error is thrown.
+	 * If the function throws an error before the timeout expires, that error is thrown.
 	 *
 	 * @export
 	 * @template T
