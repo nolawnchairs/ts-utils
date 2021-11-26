@@ -100,11 +100,10 @@ export namespace Futures {
    */
   export async function awaitWithTimeout<T>(timeout: number, runner: AsyncSupplier<T>): Promise<T> {
     return Promise.race([
-      new Promise<T>((resolve, reject) => {
-        runner()
-          .then(resolve)
-          .catch(reject)
-      }),
+      new Promise<T>((resolve, reject) => runner()
+        .then(resolve)
+        .catch(reject)
+      ),
       new Promise<T>((_, reject) => {
         setTimeout(() => reject(new Error(`Timeout of ${timeout} expired while awaiting runner function to resolve`)), timeout)
       })
