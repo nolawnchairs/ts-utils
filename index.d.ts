@@ -342,51 +342,72 @@ export declare class Latchable<T> {
 	get value(): T;
 }
 export declare namespace Objects {
+	type Keyable = string | number | symbol;
 	/**
 	 * Remove all object properties that are null or undefined,
 	 * but retains falsey values such as empty strings or zero
 	 *
 	 * @export
-	 * @param {Record<string, any>} input
-	 * @returns {Record<string, any>}
+	 * @template T
+	 * @param {T} input the input object
+	 * @return {*}  {(Partial<T> | T)}
 	 */
-	function nonNull<T = Record<string, any>>(input: T): Partial<T>;
+	export function nonNull<T = Record<Keyable, any>>(input: T): Partial<T> | T;
 	/**
 	 * Remove all object properties that are undefined, but retains
 	 * null properties and falsey values such as empty strings or zero
 	 *
 	 * @export
-	 * @param {Record<string, any>} input
-	 * @returns {Record<string, any>}
+	 * @template T
+	 * @param {T} input the input object
+	 * @return {*}  {(Partial<T> | T)}
 	 */
-	function nonUndefined<T = Record<string, any>>(input: T): Partial<T>;
+	export function nonUndefined<T = Record<Keyable, any>>(input: T): Partial<T> | T;
 	/**
 	 * Remove all object properties that are considered "falsey", which
 	 * includes null, undefined, zero, false and empty strings, but retains
 	 * empty arrays and objects
 	 *
 	 * @export
-	 * @param {Record<string, any>} input
-	 * @returns {Record<string, any>}
+	 * @template T
+	 * @param {T} input the input object
+	 * @return {*}  {(Partial<T> | T)}
 	 */
-	function truthy<T = Record<string, any>>(input: T): Partial<T>;
+	export function truthy<T = Record<Keyable, any>>(input: T): Partial<T> | T;
 	/**
 	 * Remove all object properties that are empty (zero-length) strings, but retain
 	 * all other values
 	 *
 	 * @export
-	 * @param {Record<string, any>} input
-	 * @returns {Record<string, any>}
+	 * @template T
+	 * @param {T} input
+	 * @return {*}  {(Partial<T> | T)}
 	 */
-	function nonEmptyStrings<T = Record<string, any>>(input: T): Partial<T>;
+	export function nonEmptyStrings<T = Record<Keyable, any>>(input: T): Partial<T> | T;
 	/**
-	 * Removed specified properties by provided keys
+	 * Creates a new object without the properties specified by keys
 	 *
 	 * @export
-	 * @param input the input object
-	 * @param keys the keys to omit
+	 * @template T
+	 * @template K
+	 * @param {T} input the input object
+	 * @param {...K[]} keys the properties to remove
+	 * @return {*}  {(Partial<T> | T)}
 	 */
-	function drop<T extends Record<string, any>, K extends keyof T>(input: T, ...keys: K[]): Partial<T>;
+	export function drop<T extends Record<Keyable, any>, K extends keyof T>(input: T, ...keys: K[]): Partial<T> | T;
+	/**
+	 * Map the result of a function to each entry's value in the object
+	 *
+	 * @export
+	 * @template K
+	 * @template V
+	 * @template W
+	 * @param {Record<K, V>} input the input object
+	 * @param {BiFunction<Keyable, V, W>} cb the function to map new values, provides key k and value v
+	 * @return {*}  {Record<K, W>}
+	 */
+	export function mapEntries<K extends Keyable, V, W = keyof K>(input: Record<K, V>, cb: BiFunction<Keyable, V, W>): Record<K, W>;
+	export {};
 }
 export declare enum BackoffStrategy {
 	/**
