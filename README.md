@@ -457,7 +457,7 @@ Remove all object properties that are empty (zero-length) strings.
 ```typescript
 <T extends Record<string, any>, K extends keyof T>>(input: T, ...keys: K[]) => Partial<T>
 ```
-Removed specified properties by provided keys.
+Removes specified properties by provided keys.
 
 ```typescript
 const a = {
@@ -473,6 +473,30 @@ console.log(b)
 //     second: 2,
 //     fourth: 4,
 //     fifth: 5,
+// }
+```
+### `Objects.mapEntries`
+```typescript
+<K extends Keyable, V, W = keyof K>(input: Record<K, V>, cb: BiFunction<Keyable, V, W>): Record<K, W>
+```
+Map the result of a function to each entry's value in the object.
+
+```typescript
+const a = {
+    one: 1,
+    two: 2,
+    three: 3,
+    four: 4,
+    five: 5,
+}
+const b = Objects.mapEntries(a, (k, v) => v * 2)
+console.log(b)
+// {
+//     one: 2,
+//     two: 4,
+//     three: 6,
+//     four: 8,
+//     five: 10,
 // }
 ```
 
