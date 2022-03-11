@@ -267,6 +267,17 @@ export declare namespace Futures {
 	 */
 	function delayed(ms: number, callback: VoidFunction): Promise<void>;
 	/**
+	 * Schedule a task to be executed a specific time. Note that
+	 * accuracy to the exact millisecond is not possible due to the
+	 * nature of the JS event loop. Callback will be fired on the next
+	 * event loop cycle after the time horizon has passed.
+	 *
+	 * @export
+	 * @param {Date} date
+	 * @param {VoidFunction} callback
+	 */
+	function scheduled(date: Date, callback: VoidFunction): void;
+	/**
 	 * Waits until the provided condition is met. This will not resolve
 	 * until the condition is true. To use a timeout or handle a condition
 	 * that may return false, use Futures.waitUntilResolved instead

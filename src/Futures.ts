@@ -38,6 +38,23 @@ export namespace Futures {
   }
 
   /**
+   * Schedule a task to be executed a specific time. Note that
+   * accuracy to the exact millisecond is not possible due to the
+   * nature of the JS event loop. Callback will be fired on the next
+   * event loop cycle after the time horizon has passed.
+   *
+   * @export
+   * @param {Date} date
+   * @param {VoidFunction} callback
+   */
+  export function scheduled(date: Date, callback: VoidFunction) {
+    const ms = date.getTime()
+    if (ms < Date.now())
+      throw new Error('Can only schedule a task to run at a future time')
+    delayed(ms - Date.now(), callback)
+  }
+
+  /**
    * Waits until the provided condition is met. This will not resolve
    * until the condition is true. To use a timeout or handle a condition
    * that may return false, use Futures.waitUntilResolved instead
