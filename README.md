@@ -543,10 +543,8 @@ function foo() {
 Schedules the execution of a function `callback` at the specified time `date`. Note that to-the-millisecond accuracy is not possible due to the nature of the JS event loop. Execution will occur during the next cycle of the event loop after the time horizon specified by `date` has passed. This function does not return a promise.
 
 ```typescript
-function foo() {
-    console.log('Before')
-    Futures.delayed(1000, () => console.log('This prints one second later'))
-}
+const time = new Date(Date.now() + 10000)
+Futures.scheduled(time, () => console.log('This prints in ten seconds'))
 ```
 
 ### `async Futures.waitUntil`
