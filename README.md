@@ -535,6 +535,20 @@ function foo() {
 }
 ```
 
+### `Futures.scheduled`
+```typescript
+(date: Date, callback: VoidFunction) => void
+```
+
+Schedules the execution of a function `callback` at the specified time `date`. Note that to-the-millisecond accuracy is not possible due to the nature of the JS event loop. Execution will occur during the next cycle of the event loop after the time horizon specified by `date` has passed. This function does not return a promise.
+
+```typescript
+function foo() {
+    console.log('Before')
+    Futures.delayed(1000, () => console.log('This prints one second later'))
+}
+```
+
 ### `async Futures.waitUntil`
 ```typescript
 async (condition: AsyncSupplier<boolean>, waitInterval?: number) => Promise<void>
